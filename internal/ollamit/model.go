@@ -27,14 +27,15 @@ const (
 type Config struct {
 	DryRun bool
 	Model  string
+
+	GitClient    *git.Client
+	OllamaClient *ollama.Client
 }
 
 type Ollamit struct {
 	config *Config
 
 	program *tea.Program
-	git     *git.Client
-	ollama  *ollama.Client
 
 	quit           bool
 	err            error
@@ -47,9 +48,6 @@ var _ tea.Model = (*Ollamit)(nil)
 func New(cfg *Config) *Ollamit {
 	m := &Ollamit{
 		config: cfg,
-
-		git:    git.New(),
-		ollama: ollama.New(),
 
 		status:         statusGenerating,
 		messageBuilder: new(strings.Builder),
