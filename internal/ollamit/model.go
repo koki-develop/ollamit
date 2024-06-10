@@ -3,6 +3,7 @@ package ollamit
 import (
 	"strings"
 
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/koki-develop/ollamit/internal/git"
 	"github.com/koki-develop/ollamit/internal/ollama"
@@ -33,14 +34,17 @@ type Config struct {
 }
 
 type Ollamit struct {
-	config *Config
-
+	config  *Config
 	program *tea.Program
 
+	// state
 	quit           bool
 	err            error
 	status         status
 	messageBuilder *strings.Builder
+
+	// component
+	spinner spinner.Model
 }
 
 var _ tea.Model = (*Ollamit)(nil)
@@ -49,8 +53,12 @@ func New(cfg *Config) *Ollamit {
 	m := &Ollamit{
 		config: cfg,
 
+		// state
 		status:         statusGenerating,
 		messageBuilder: new(strings.Builder),
+
+		// component
+		spinner: spinner.New(spinner.WithSpinner(spinner.Dot)),
 	}
 
 	p := tea.NewProgram(m)
@@ -70,9 +78,13 @@ func (m *Ollamit) Start() error {
 }
 
 func (m *Ollamit) Init() tea.Cmd {
-	return func() tea.Msg {
-		return generateMsg{}
-	}
+	return tea.Batch(
+		m.spinner.Tick,
+		func() tea.Msg {
+			return generateMsg{}
+		},
+	)
+
 }
 
 func (m *Ollamit) formatMsg(msg string) string {
