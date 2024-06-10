@@ -92,8 +92,10 @@ func (m *Ollamit) generateCmd() tea.Cmd {
 
 func (m *Ollamit) commitCmd() tea.Cmd {
 	return func() tea.Msg {
-		if err := m.git.Commit(m.formatMsg(m.messageBuilder.String())); err != nil {
-			return errorMsg{err}
+		if !m.config.DryRun {
+			if err := m.git.Commit(m.formatMsg(m.messageBuilder.String())); err != nil {
+				return errorMsg{err}
+			}
 		}
 		return commitMsg{}
 	}

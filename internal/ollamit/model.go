@@ -24,7 +24,8 @@ const (
 )
 
 type Config struct {
-	Model string
+	DryRun bool
+	Model  string
 }
 
 type Ollamit struct {
