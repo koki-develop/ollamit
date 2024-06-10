@@ -37,5 +37,5 @@ func Execute() {
 func init() {
 	rootCmd.Flags().BoolVar(&flagDryRun, "dry-run", false, "dry run")
 	rootCmd.Flags().StringVarP(&flagModel, "model", "m", "", "model name")
-	rootCmd.MarkFlagRequired("model")
+	_ = rootCmd.MarkFlagRequired("model")
 }
