@@ -11,6 +11,10 @@ func (m *Ollamit) View() string {
 		s.WriteString(m.commands())
 	}
 
+	if m.status == statusCommitting {
+		s.WriteString("Committing...\n")
+	}
+
 	if m.status == statusSuccess {
 		s.WriteString("Commit successful!\n")
 	}

@@ -20,6 +20,7 @@ const (
 	_ status = iota
 	statusGenerating
 	statusGenerated
+	statusCommitting
 	statusSuccess
 )
 

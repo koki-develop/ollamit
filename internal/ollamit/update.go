@@ -9,7 +9,7 @@ type errorMsg struct{ err error }
 type generateMsg struct{}
 type generatingMsg struct{ chunk string }
 type generatedMsg struct{}
-type commitMsg struct{}
+type successMsg struct{}
 
 func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
@@ -26,7 +26,7 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case generatedMsg:
 		m.status = statusGenerated
 		return m, nil
-	case commitMsg:
+	case successMsg:
 		m.status = statusSuccess
 		return m, tea.Quit
 
@@ -39,6 +39,7 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		if m.status == statusGenerated {
 			if msg.Type == tea.KeyEnter {
+				m.status = statusCommitting
 				return m, m.commitCmd()
 			}
 			switch string(msg.Runes) {
@@ -97,6 +98,6 @@ func (m *Ollamit) commitCmd() tea.Cmd {
 				return errorMsg{err}
 			}
 		}
-		return commitMsg{}
+		return successMsg{}
 	}
 }
