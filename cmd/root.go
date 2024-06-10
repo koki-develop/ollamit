@@ -7,7 +7,10 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "CLI_NAME", // TODO
+	Use: "ollamit",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return nil
+	},
 }
 
 func Execute() {
