@@ -6,8 +6,8 @@ import (
 )
 
 type errorMsg struct{ err error }
+type generateMsg struct{}
 type generatingMsg struct{ chunk string }
-type regenerateMsg struct{}
 type generatedMsg struct{}
 type commitMsg struct{}
 
@@ -16,11 +16,13 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case errorMsg:
 		m.err = msg.err
 		return m, tea.Quit
+	case generateMsg:
+		m.messageBuilder.Reset()
+		m.status = statusGenerating
+		return m, m.generateCmd()
 	case generatingMsg:
 		m.messageBuilder.WriteString(msg.chunk)
 		return m, nil
-	case regenerateMsg:
-		return m, m.generateCmd()
 	case generatedMsg:
 		m.status = statusGenerated
 		return m, nil
@@ -54,9 +56,7 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m *Ollamit) regenerateCmd() tea.Cmd {
 	return func() tea.Msg {
-		m.status = statusGenerating
-		m.messageBuilder.Reset()
-		return regenerateMsg{}
+		return generateMsg{}
 	}
 }
 

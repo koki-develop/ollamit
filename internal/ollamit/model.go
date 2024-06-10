@@ -71,7 +71,9 @@ func (m *Ollamit) Start() error {
 }
 
 func (m *Ollamit) Init() tea.Cmd {
-	return m.generateCmd()
+	return func() tea.Msg {
+		return generateMsg{}
+	}
 }
 
 func (m *Ollamit) formatMsg(msg string) string {
