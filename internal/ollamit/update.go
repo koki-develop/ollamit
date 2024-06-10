@@ -13,6 +13,11 @@ type successMsg struct{}
 
 func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	default:
+		var cmd tea.Cmd
+		m.spinner, cmd = m.spinner.Update(msg)
+		return m, cmd
+
 	case errorMsg:
 		m.err = msg.err
 		return m, tea.Quit
