@@ -3,6 +3,7 @@ package git
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 var excludeFiles = []string{
@@ -17,20 +18,41 @@ func New() *Client {
 	return &Client{}
 }
 
-func (c *Client) DiffStaged() (string, error) {
-	args := []string{
-		"diff", "--cached", "--diff-algorithm=histogram",
-	}
+type Diff struct {
+	Files   []string
+	Content string
+}
+
+func (c *Client) DiffStaged() (*Diff, error) {
+	excludes := []string{}
 	for _, f := range excludeFiles {
-		args = append(args, fmt.Sprintf(":(exclude)%s", f))
+		excludes = append(excludes, fmt.Sprintf(":(exclude)%s", f))
 	}
 
-	out, err := exec.Command("git", args...).Output()
-	if err != nil {
-		return "", err
+	d := &Diff{}
+	{
+		args := []string{"diff", "--staged", "--name-only", "--diff-algorithm=histogram"}
+		out, err := exec.Command("git", append(args, excludes...)...).Output()
+		if err != nil {
+			return nil, err
+		}
+		sout := strings.TrimSpace(string(out))
+		if sout == "" {
+			return nil, nil
+		}
+		d.Files = append(d.Files, strings.Split(sout, "\n")...)
 	}
 
-	return string(out), nil
+	{
+		args := []string{"diff", "--staged", "--diff-algorithm=histogram"}
+		out, err := exec.Command("git", append(args, excludes...)...).Output()
+		if err != nil {
+			return nil, err
+		}
+		d.Content = string(out)
+	}
+
+	return d, nil
 }
 
 func (c *Client) Commit(msg string) error {
