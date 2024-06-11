@@ -15,6 +15,9 @@ A command-line tool to generate commit messages with ollama.
 ## Contents
 
 - [Installation](#installation)
+  - [Homebrew Tap](#homebrew-tap)
+  - [`go install`](#go-install)
+  - [Releases](#releases)
 - [Usage](#usage)
 - [LICENSE](#license)
 
@@ -38,7 +41,19 @@ Download the binary from the [releases page](https://github.com/koki-develop/oll
 
 ## Usage
 
-WIP
+```console
+$ ollamit
+A command-line tool to generate commit messages with ollama.
+
+Usage:
+  ollamit [flags]
+
+Flags:
+      --dry-run        dry run
+  -h, --help           help for ollamit
+  -m, --model string   model name
+  -v, --version        version for ollamit
+```
 
 ## LICENSE
 
