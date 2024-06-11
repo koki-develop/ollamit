@@ -52,7 +52,7 @@ Download the binary from the [releases page](https://github.com/koki-develop/oll
 ## Usage
 
 ```console
-$ ollamit
+$ ollamit --help
 A command-line tool to generate commit messages with ollama.
 
 Usage:
