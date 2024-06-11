@@ -19,6 +19,10 @@ var rootCmd = &cobra.Command{
 	Use:  "ollamit",
 	Long: "A command-line tool to generate commit messages with ollama.",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if flagModel == "" {
+			return errors.New("model name is required")
+		}
+
 		g := git.New()
 		diff, err := g.DiffStaged()
 		if err != nil {
@@ -51,6 +55,5 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().BoolVar(&flagDryRun, "dry-run", false, "dry run")
-	rootCmd.Flags().StringVarP(&flagModel, "model", "m", "", "model name")
-	_ = rootCmd.MarkFlagRequired("model")
+	rootCmd.Flags().StringVarP(&flagModel, "model", "m", os.Getenv("OLLAMIT_MODEL"), "model name")
 }
