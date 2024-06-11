@@ -17,12 +17,19 @@ A command-line tool to generate commit messages with ollama.
 
 ## Contents
 
+- [Prerequisites](#prerequisites)
 - [Installation](#installation)
   - [Homebrew Tap](#homebrew-tap)
   - [`go install`](#go-install)
   - [Releases](#releases)
 - [Usage](#usage)
 - [LICENSE](#license)
+
+## Prerequisites
+
+You need to have set up Ollama.
+
+- [Ollama](https://ollama.com/)
 
 ## Installation
 
