@@ -42,7 +42,6 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.Type {
 		case tea.KeyCtrlC:
-			m.quit = true
 			return m, tea.Quit
 		}
 
@@ -55,7 +54,6 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "r":
 				return m, m.regenerateCmd()
 			case "q":
-				m.quit = true
 				return m, tea.Quit
 			}
 		}

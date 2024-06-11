@@ -35,9 +35,5 @@ func (m *Ollamit) View() string {
 		fmt.Fprintf(s, "%sCommit successful!\n", styleCheckmark.Render())
 	}
 
-	if m.quit {
-		fmt.Fprintln(s, "Goodbye!")
-	}
-
 	return s.String()
 }

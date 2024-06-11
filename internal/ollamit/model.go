@@ -39,7 +39,6 @@ type Ollamit struct {
 
 	// state
 	diff           string
-	quit           bool
 	err            error
 	status         status
 	messageBuilder *strings.Builder
