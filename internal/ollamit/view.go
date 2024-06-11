@@ -10,7 +10,7 @@ import (
 var (
 	styleSpinner   = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF"))
 	styleCheckmark = lipgloss.NewStyle().SetString("✔ ").Foreground(lipgloss.Color("#00FF00"))
-	styleMessage   = lipgloss.NewStyle().Padding(1).Bold(true).Foreground(lipgloss.Color("#FFFFFF"))
+	styleMessage   = lipgloss.NewStyle().Padding(1, 2).Bold(true).Foreground(lipgloss.Color("#FFFFFF"))
 )
 
 func (m *Ollamit) View() string {
