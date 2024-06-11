@@ -59,7 +59,7 @@ func New(cfg *Config) *Ollamit {
 		messageBuilder: new(strings.Builder),
 
 		// component
-		spinner: spinner.New(spinner.WithSpinner(spinner.Dot)),
+		spinner: spinner.New(spinner.WithSpinner(spinner.Dot), spinner.WithStyle(styleSpinner)),
 	}
 
 	p := tea.NewProgram(m)

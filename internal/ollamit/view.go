@@ -1,49 +1,40 @@
 package ollamit
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/charmbracelet/lipgloss"
+)
+
+var (
+	styleSpinner   = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF"))
+	styleCheckmark = lipgloss.NewStyle().SetString("✔ ").Foreground(lipgloss.Color("#00FF00"))
+)
 
 func (m *Ollamit) View() string {
 	s := new(strings.Builder)
 
-	s.WriteString(m.messagePreview())
-
-	if m.status == statusGenerated {
-		s.WriteString(m.commands())
+	if m.status == statusGenerating {
+		fmt.Fprintf(s, "%sGenerating commit message...\n", m.spinner.View())
+	} else {
+		fmt.Fprintf(s, "%sGenerated!\n", styleCheckmark.Render())
 	}
 
-	if m.status == statusCommitting {
-		s.WriteString("Committing...\n")
-	}
+	fmt.Fprintln(s, m.formatMsg(m.messageBuilder.String()))
 
-	if m.status == statusSuccess {
-		s.WriteString("Commit successful!\n")
+	switch m.status {
+	case statusGenerated:
+		fmt.Fprintln(s, "Press [enter] to commit, [r] to regenerate, or [q] to quit.")
+	case statusCommitting:
+		fmt.Fprintf(s, "%sCommitting...\n", m.spinner.View())
+	case statusSuccess:
+		fmt.Fprintf(s, "%sCommit successful!\n", styleCheckmark.Render())
 	}
 
 	if m.quit {
-		s.WriteString("Goodbye!\n")
+		fmt.Fprintln(s, "Goodbye!")
 	}
 
 	return s.String()
-}
-
-func (m *Ollamit) messagePreview() string {
-	s := new(strings.Builder)
-	msg := m.formatMsg(m.messageBuilder.String())
-
-	if m.status == statusGenerating {
-		s.WriteString("Generating commit message...\n")
-		s.WriteString(msg)
-	}
-
-	if m.status == statusGenerated || m.status == statusSuccess {
-		s.WriteString("Generated message:\n")
-		s.WriteString(msg)
-	}
-
-	s.WriteByte('\n')
-	return s.String()
-}
-
-func (m *Ollamit) commands() string {
-	return "Press [enter] to commit, [r] to regenerate, or [q] to quit.\n"
 }
