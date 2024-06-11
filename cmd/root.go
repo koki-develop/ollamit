@@ -23,24 +23,15 @@ var rootCmd = &cobra.Command{
 			return errors.New("model name is required")
 		}
 
-		g := git.New()
-		diff, err := g.DiffStaged()
-		if err != nil {
-			return err
-		}
-		if diff == "" {
-			return errors.New("no changes staged")
-		}
-
 		cfg := &ollamit.Config{
 			DryRun:       flagDryRun,
 			Model:        flagModel,
-			GitClient:    g,
+			GitClient:    git.New(),
 			OllamaClient: ollama.New(),
 		}
 
 		m := ollamit.New(cfg)
-		if err := m.Start(diff); err != nil {
+		if err := m.Start(); err != nil {
 			return err
 		}
 		return nil

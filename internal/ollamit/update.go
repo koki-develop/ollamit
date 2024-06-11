@@ -1,11 +1,15 @@
 package ollamit
 
 import (
+	"errors"
+
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/koki-develop/ollamit/internal/git"
 	"github.com/koki-develop/ollamit/internal/ollama"
 )
 
 type errorMsg struct{ err error }
+type diffMsg struct{ diff *git.Diff }
 type generateMsg struct{}
 type generatingMsg struct{ chunk string }
 type generatedMsg struct{}
@@ -25,6 +29,10 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case errorMsg:
 		m.err = msg.err
 		return m, tea.Quit
+
+	case diffMsg:
+		m.diff = msg.diff
+		return m, m.startGenerateCmd()
 	case generateMsg:
 		m.messageBuilder.Reset()
 		m.status = statusGenerating
@@ -52,7 +60,7 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			switch string(msg.Runes) {
 			case "r":
-				return m, m.regenerateCmd()
+				return m, m.diffCmd()
 			case "q":
 				return m, tea.Quit
 			}
@@ -62,7 +70,20 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m *Ollamit) regenerateCmd() tea.Cmd {
+func (m *Ollamit) diffCmd() tea.Cmd {
+	return func() tea.Msg {
+		diff, err := m.config.GitClient.DiffStaged()
+		if err != nil {
+			return errorMsg{err}
+		}
+		if diff == nil {
+			return errorMsg{errors.New("no staged changes")}
+		}
+		return diffMsg{diff}
+	}
+}
+
+func (m *Ollamit) startGenerateCmd() tea.Cmd {
 	return func() tea.Msg {
 		return generateMsg{}
 	}
@@ -74,7 +95,7 @@ func (m *Ollamit) generateCmd() tea.Cmd {
 			Model: m.config.Model,
 			Messages: []ollama.ChatMessage{
 				{Role: "system", Content: prompt},
-				{Role: "user", Content: m.diff},
+				{Role: "user", Content: m.diff.Content},
 			},
 		})
 		if err != nil {

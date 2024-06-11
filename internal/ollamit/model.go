@@ -12,7 +12,7 @@ import (
 const (
 	prompt = `Based on the content of the git diff, generate a short and concise one-line commit message.
 The commit message should clearly describe the specific changes without omitting any important details and exclude any unnecessary information.
-Your entire response will be used directly as the commit message. `
+Your entire response will be used directly as the commit message.`
 )
 
 type status int
@@ -38,7 +38,7 @@ type Ollamit struct {
 	program *tea.Program
 
 	// state
-	diff           string
+	diff           *git.Diff
 	err            error
 	status         status
 	messageBuilder *strings.Builder
@@ -68,9 +68,7 @@ func New(cfg *Config) *Ollamit {
 	return m
 }
 
-func (m *Ollamit) Start(diff string) error {
-	m.diff = diff
-
+func (m *Ollamit) Start() error {
 	if _, err := m.program.Run(); err != nil {
 		return err
 	}
@@ -84,9 +82,7 @@ func (m *Ollamit) Start(diff string) error {
 func (m *Ollamit) Init() tea.Cmd {
 	return tea.Batch(
 		m.spinner.Tick,
-		func() tea.Msg {
-			return generateMsg{}
-		},
+		m.diffCmd(),
 	)
 
 }
