@@ -17,7 +17,7 @@ func (m *Ollamit) View() string {
 	s := new(strings.Builder)
 
 	if m.status == statusGenerating {
-		fmt.Fprintf(s, "%sGenerating commit message...\n", m.spinner.View())
+		fmt.Fprintf(s, "%sGenerating...\n", m.spinner.View())
 	} else {
 		fmt.Fprintf(s, "%sGenerated!\n", styleCheckmark.Render())
 	}
