@@ -11,6 +11,10 @@
 A command-line tool to generate commit messages with ollama.
 </p>
 
+<p align="center">
+<img src="./assets/demo.gif" />
+</p>
+
 ## Contents
 
 - [Installation](#installation)
