@@ -12,6 +12,7 @@ var (
 	styleSpinner   = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF"))
 	styleCheckmark = lipgloss.NewStyle().SetString("✔ ").Foreground(lipgloss.Color("#00FF00"))
 	styleMessage   = lipgloss.NewStyle().Padding(1, 2).Bold(true).Foreground(lipgloss.Color("#FFFFFF"))
+	styleQuestion  = lipgloss.NewStyle().SetString("? ").Foreground(lipgloss.Color("#FF00FF"))
 )
 
 func (m *Ollamit) View() string {
@@ -28,7 +29,7 @@ func (m *Ollamit) View() string {
 
 	switch m.status {
 	case statusGenerated:
-		fmt.Fprintln(s, "Press [enter] to commit, [r] to regenerate, or [q] to quit.")
+		fmt.Fprintf(s, "%sPress [enter] to commit, [r] to regenerate, or [q] to quit.\n", styleQuestion.Render())
 	case statusCommitting:
 		fmt.Fprintf(s, "%sCommitting...\n", m.spinner.View())
 	case statusSuccess:
