@@ -10,6 +10,7 @@ import (
 var (
 	styleSpinner   = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF"))
 	styleCheckmark = lipgloss.NewStyle().SetString("✔ ").Foreground(lipgloss.Color("#00FF00"))
+	styleMessage   = lipgloss.NewStyle().Padding(1).Bold(true).Foreground(lipgloss.Color("#FFFFFF"))
 )
 
 func (m *Ollamit) View() string {
@@ -21,7 +22,7 @@ func (m *Ollamit) View() string {
 		fmt.Fprintf(s, "%sGenerated!\n", styleCheckmark.Render())
 	}
 
-	fmt.Fprintln(s, m.formatMsg(m.messageBuilder.String()))
+	fmt.Fprintln(s, styleMessage.Render(m.formatMsg(m.messageBuilder.String())))
 
 	switch m.status {
 	case statusGenerated:
