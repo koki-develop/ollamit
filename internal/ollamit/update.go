@@ -68,16 +68,11 @@ func (m *Ollamit) regenerateCmd() tea.Cmd {
 
 func (m *Ollamit) generateCmd() tea.Cmd {
 	return func() tea.Msg {
-		diff, err := m.config.GitClient.DiffStaged()
-		if err != nil {
-			return errorMsg{err}
-		}
-
 		resp, err := m.config.OllamaClient.Chat(&ollama.ChatInput{
 			Model: m.config.Model,
 			Messages: []ollama.ChatMessage{
 				{Role: "system", Content: prompt},
-				{Role: "user", Content: diff},
+				{Role: "user", Content: m.diff},
 			},
 		})
 		if err != nil {

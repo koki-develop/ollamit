@@ -38,6 +38,7 @@ type Ollamit struct {
 	program *tea.Program
 
 	// state
+	diff           string
 	quit           bool
 	err            error
 	status         status
@@ -67,13 +68,16 @@ func New(cfg *Config) *Ollamit {
 	return m
 }
 
-func (m *Ollamit) Start() error {
+func (m *Ollamit) Start(diff string) error {
+	m.diff = diff
+
 	if _, err := m.program.Run(); err != nil {
 		return err
 	}
 	if m.err != nil {
 		return m.err
 	}
+
 	return nil
 }
 
