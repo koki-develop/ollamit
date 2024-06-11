@@ -10,9 +10,7 @@ import (
 )
 
 const (
-	prompt = `Based on the content of the git diff, generate a short and concise one-line commit message.
-The commit message should clearly describe the specific changes without omitting any important details and exclude any unnecessary information.
-Your entire response will be used directly as the commit message.`
+	prompt = "You will be provided with the output of a `git diff` command. Analyze the changes and generate a clear and concise one-line commit message that accurately summarizes the modifications made. Your entire response will be used directly as the commit message."
 )
 
 type status int
