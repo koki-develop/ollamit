@@ -15,7 +15,8 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "ollamit",
+	Use:  "ollamit",
+	Long: "A command-line tool to generate commit messages with ollama.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		g := git.New()
 		diff, err := g.DiffStaged()
