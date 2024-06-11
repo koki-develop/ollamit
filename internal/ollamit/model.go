@@ -43,6 +43,7 @@ type Ollamit struct {
 	err            error
 	status         status
 	messageBuilder *strings.Builder
+	width          int
 
 	// component
 	spinner spinner.Model

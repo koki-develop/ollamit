@@ -18,6 +18,10 @@ func (m *Ollamit) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.spinner, cmd = m.spinner.Update(msg)
 		return m, cmd
 
+	case tea.WindowSizeMsg:
+		m.width = msg.Width
+		return m, nil
+
 	case errorMsg:
 		m.err = msg.err
 		return m, tea.Quit

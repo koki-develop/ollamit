@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 var (
@@ -22,7 +23,8 @@ func (m *Ollamit) View() string {
 		fmt.Fprintf(s, "%sGenerated!\n", styleCheckmark.Render())
 	}
 
-	fmt.Fprintln(s, styleMessage.Render(m.formatMsg(m.messageBuilder.String())))
+	msg := wordwrap.String(m.messageBuilder.String(), m.width-4)
+	fmt.Fprintln(s, styleMessage.Render(m.formatMsg(msg)))
 
 	switch m.status {
 	case statusGenerated:
