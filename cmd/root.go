@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"os"
 
 	"github.com/koki-develop/ollamit/internal/git"
@@ -22,6 +23,9 @@ var rootCmd = &cobra.Command{
 		diff, err := g.DiffStaged()
 		if err != nil {
 			return err
+		}
+		if diff == "" {
+			return errors.New("no changes staged")
 		}
 
 		cfg := &ollamit.Config{
