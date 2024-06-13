@@ -32,7 +32,7 @@ func (c *Client) DiffStaged() (*Diff, error) {
 	d := &Diff{}
 	{
 		args := []string{"diff", "--staged", "--name-only", "--diff-algorithm=histogram"}
-		out, err := exec.Command("git", append(args, excludes...)...).Output()
+		out, err := exec.Command("git", args...).Output()
 		if err != nil {
 			return nil, err
 		}
